@@ -1,7 +1,11 @@
+import Layout from "../components/Layout"
+
 export default function Home() {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <Layout>
+      <div className="text-3xl font-bold">
+        {"Hello World"}
+      </div>
+    </Layout>
   )
 }
