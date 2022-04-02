@@ -2,7 +2,7 @@ import Head from "next/head"
 import Footer from "./Footer"
 import Header from "./Header"
 
-export default function Layout({ title, children }) {
+export default function Layout({ title, mainClassName, children }) {
   return (
     <>
       <Head>
@@ -10,7 +10,9 @@ export default function Layout({ title, children }) {
       </Head>
       <div>
         <Header />
-        {children}
+        <main className={mainClassName || "p-10"}>
+          {children}
+        </main>
         <Footer />
       </div>
     </>
