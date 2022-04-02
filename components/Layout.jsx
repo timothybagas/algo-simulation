@@ -1,4 +1,5 @@
 import Head from "next/head"
+import Header from "./Header"
 
 export default function Layout({ title, children }) {
   return (
@@ -7,6 +8,7 @@ export default function Layout({ title, children }) {
         <title>{(title ? title + " - " : "") + "Algo Simulation"}</title>
       </Head>
       <div>
+        <Header />
         {children}
       </div>
     </>
