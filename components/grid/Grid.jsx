@@ -12,7 +12,7 @@ import {
 
 const GRID_ROWS = 10, GRID_COLS = 20;
 
-export default function Grid({ algorithm }) {
+export default function Grid({ algorithmName, algorithm }) {
   const [startNode, setStartNode] = useState({row: 0, col: 0 });
   const [targetNode, setTargetNode] = useState({ row: GRID_ROWS - 1, col: GRID_COLS - 1 });
   const [changeNodeMode, setChangeNodeMode] = useState(0);
@@ -184,14 +184,14 @@ export default function Grid({ algorithm }) {
 
   return (
     <Layout
-      title="Bread First Search"
+      title={algorithmName}
       mainClassName="py-10 space-y-10"
     >
       <div className="px-10 flex items-center space-x-2 font-bold text-3xl">
         <Link href="/">
           <a><IoMdArrowRoundBack /></a>
         </Link>
-        <h1>{"Bread First Search"}</h1>
+        <h1>{algorithmName}</h1>
       </div>
 
       <div className="flex justify-center space-x-5">

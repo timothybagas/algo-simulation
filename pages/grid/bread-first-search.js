@@ -6,6 +6,7 @@ import {
 export default function BreadFirstSearch() {
   return (
     <Grid
+      algorithmName="Bread First Search"
       algorithm={runBreadFirstSearch}
     />
   )
