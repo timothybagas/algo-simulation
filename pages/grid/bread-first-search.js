@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { BsPlayCircleFill, BsFillBackspaceFill } from "react-icons/bs";
 
 import Layout from "../../components/Layout"
 import GridNode from "../../components/GridNode";
@@ -17,6 +18,23 @@ export default function BreadFirstSearch() {
   const [grid, setGrid] = useState(getInitialGrid(
     GRID_ROWS, GRID_COLS, startNode, targetNode
   ));
+  
+  const [resetGrid, setResetGrid] = useState(false);
+
+  const resetGridHandler = () => {
+    for (const row of grid) {
+      for (const node of row) {
+        document.getElementById(`node-${node.row}-${node.col}`).classList.remove('bg-sky-400', 'bg-yellow-300');
+      }
+    }
+    setResetGrid(!resetGrid);
+  };
+
+  useEffect(() => {
+    setGrid(getInitialGrid(
+      GRID_ROWS, GRID_COLS, startNode, targetNode
+    ));
+  }, [resetGrid]);
 
   const [mousePressed, setMousePressed] = useState(false);
 
@@ -88,9 +106,28 @@ export default function BreadFirstSearch() {
   return (
     <Layout
       title="Bread First Search"
-      mainClassName="py-10"
+      mainClassName="py-10 space-y-10"
     >
-      <button onClick={runAlgorithm}>{"Simulate"}</button>
+      <div className="flex justify-center space-x-5">
+        {/* simulate */}
+        <button
+          className="bg-green-500 text-white font-bold p-2 rounded-lg flex items-center"
+          onClick={runAlgorithm}
+        >
+          <BsPlayCircleFill className="mr-1" />
+          {"Simulate"}
+        </button>
+
+        {/* reset grid */}
+        <button
+          className="bg-red-500 text-white font-bold p-2 rounded-lg flex items-center"
+          onClick={resetGridHandler}
+        >
+          <BsFillBackspaceFill className="mr-1" />
+          {"Reset Grid"}
+        </button>
+      </div>
+
       <div className="w-11/12 m-auto">
         {grid.map((row, i) => (
           <div key={i} className="flex justify-center">
