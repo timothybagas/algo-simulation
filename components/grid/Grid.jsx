@@ -223,12 +223,11 @@ export default function Grid({ algorithmName, algorithm }) {
           {grid.map((row, i) => (
             <div key={i} className="flex justify-center">
               {row.map((node, j) => {
-                const { row, col, weight, isStartNode, isTargetNode, isWall } = node;
+                const { row, col, isStartNode, isTargetNode, isWall } = node;
                 return (
                   <GridNode
                     row={row}
                     col={col}
-                    weight={weight}
                     isStartNode={isStartNode}
                     isTargetNode={isTargetNode}
                     isWall={isWall}

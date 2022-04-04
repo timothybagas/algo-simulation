@@ -3,12 +3,11 @@ export default function createNode(
   col,
   isStartNode,
   isTargetNode,
-  weight
 ) {
   return {
     row,
     col,
-    weight,
+    distance: Infinity,
     isStartNode,
     isTargetNode,
     isVisited: false,

@@ -4,7 +4,6 @@ import { ImLocation2 } from "react-icons/im";
 export default function GridNode({
   row,
   col,
-  weight,
   isStartNode,
   isTargetNode,
   isWall,
@@ -23,7 +22,6 @@ export default function GridNode({
       <div className="flex justify-center items-center h-full p-3 hover:p-1 duration-200 ease-in">
         {isStartNode && <MdOutlineMyLocation className="w-full h-full" />}
         {isTargetNode && <ImLocation2 className="w-full h-full" />}
-        {weight !== Infinity && weight}
       </div>
     </div>
   )
