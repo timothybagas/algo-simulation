@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { BsPlayCircleFill, BsFillBackspaceFill } from "react-icons/bs";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 import Layout from "../../components/Layout"
 import GridNode from "../../components/GridNode";
@@ -108,6 +110,13 @@ export default function BreadFirstSearch() {
       title="Bread First Search"
       mainClassName="py-10 space-y-10"
     >
+      <div className="px-10 flex items-center space-x-2 font-bold text-3xl">
+        <Link href="/">
+          <a><IoMdArrowRoundBack /></a>
+        </Link>
+        <h1>{"Bread First Search"}</h1>
+      </div>
+
       <div className="flex justify-center space-x-5">
         {/* simulate */}
         <button
