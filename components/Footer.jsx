@@ -7,6 +7,7 @@ export default function Footer() {
           href="https://github.com/timothybagas/"
           className="hover:text-sky-400 duration-200 ease-in font-bold"
           target="_blank"
+          rel="noreferrer"
         >
           {"@timothybagas"}
         </a>
