@@ -142,9 +142,9 @@ export default function BreadFirstSearch() {
       grid[startNode.row][startNode.col], grid, GRID_ROWS, GRID_COLS
     );
     const path = reachTargetNode ? findPath(grid[targetNode.row][targetNode.col]) : null;
-    animateAlgorithm(visitedNodeOrder, path);
+    animateAlgorithm(visitedNodeOrder, path, reachTargetNode);
   };
-  const animateAlgorithm = (visitedNodeOrder, path) => {
+  const animateAlgorithm = (visitedNodeOrder, path, reachTargetNode) => {
     for (let i = 0; i <= visitedNodeOrder.length; i++) {
       if (i === visitedNodeOrder.length) {
         setTimeout(() => {
@@ -160,6 +160,9 @@ export default function BreadFirstSearch() {
         document.getElementById(`node-${node.row}-${node.col}`).classList.add(
           'bg-sky-400'
         );
+        if (!reachTargetNode && i === visitedNodeOrder.length - 1) {
+          setAlgorithmIsRunning(false);
+        }
       }, 20*i);
     }
   };
