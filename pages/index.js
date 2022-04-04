@@ -8,6 +8,7 @@ export default function Home() {
         <ContentCard
           title="Grid Algorithms"
           algorithms={["Bread First Search", "Dijkstra", "A-Star", "Depth First Search"]}
+          type="grid"
         />
       </div>
     </Layout>

@@ -1,6 +1,9 @@
+import Link from "next/link"
+
 export default function ContentCard({
   title,
   algorithms,
+  type
 }) {
   return (
     <div className="rounded-xl drop-shadow-xl bg-white hover:bg-gray-100 cursor-pointer">
@@ -16,7 +19,9 @@ export default function ContentCard({
               className="bg-gray-200 p-2 hover:bg-sky-400 hover:text-white duration-200 ease-in rounded-lg w-fit inline-block m-1"
               key={key}
             >
-              {algorithm}
+              <Link href={`${type}/${algorithm.toLowerCase().split(/ /).join('-')}`}>
+                <a>{algorithm}</a>
+              </Link>
             </div>
           ))}
         </div>
