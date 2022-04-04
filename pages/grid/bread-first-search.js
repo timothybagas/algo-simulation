@@ -213,27 +213,33 @@ export default function BreadFirstSearch() {
       </div>
 
       <div className="w-11/12 m-auto">
-        {grid.map((row, i) => (
-          <div key={i} className="flex justify-center">
-            {row.map((node, j) => {
-              const { row, col, weight, isStartNode, isTargetNode, isWall } = node;
-              return (
-                <GridNode
-                  row={row}
-                  col={col}
-                  weight={weight}
-                  isStartNode={isStartNode}
-                  isTargetNode={isTargetNode}
-                  isWall={isWall}
-                  onMouseDown={() => mouseDownHandler(row, col)}
-                  onMouseEnter={() => mouseEnterHandler(row, col)}
-                  onMouseUp={mouseUpHandler}
-                  key={j}
-                />
-              );
-            })}
-          </div>
-        ))}
+        <p className="text-center">
+          <span className="font-bold">{"Note : "}</span>
+          {"Tap an empty grid cell to add/remove wall"}
+        </p>
+        <div className="w-full">
+          {grid.map((row, i) => (
+            <div key={i} className="flex justify-center">
+              {row.map((node, j) => {
+                const { row, col, weight, isStartNode, isTargetNode, isWall } = node;
+                return (
+                  <GridNode
+                    row={row}
+                    col={col}
+                    weight={weight}
+                    isStartNode={isStartNode}
+                    isTargetNode={isTargetNode}
+                    isWall={isWall}
+                    onMouseDown={() => mouseDownHandler(row, col)}
+                    onMouseEnter={() => mouseEnterHandler(row, col)}
+                    onMouseUp={mouseUpHandler}
+                    key={j}
+                  />
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </Layout>
   )
