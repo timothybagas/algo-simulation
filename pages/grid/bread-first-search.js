@@ -52,14 +52,20 @@ export default function BreadFirstSearch() {
   };
 
   const mouseDownHandler = (row, col) => {
-    const newGrid = toggleGridNode(row, col);
-    setGrid(newGrid);
+    const node = grid[row][col];
+    if (!node.isStartNode && !node.isTargetNode) {
+      const newGrid = toggleGridNode(row, col);
+      setGrid(newGrid);
+    }
     setMousePressed(true);
   };
   const mouseEnterHandler = (row, col) => {
     if (!mousePressed) return;
-    const newGrid = toggleGridNode(row, col);
-    setGrid(newGrid);
+    const node = grid[row][col];
+    if (!node.isStartNode && !node.isTargetNode) {
+      const newGrid = toggleGridNode(row, col);
+      setGrid(newGrid);
+    }
   };
   const mouseUpHandler = () => {
     setMousePressed(false);
