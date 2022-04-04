@@ -20,15 +20,10 @@ export default function GridNode({
       onMouseEnter={onMouseEnter}
       onMouseUp={onMouseUp}
     >
-      <div className="flex justify-center items-center h-full p-3">
-        {
-          isStartNode ? <MdOutlineMyLocation className="w-full h-full" /> :
-          (
-            isTargetNode ? 
-            <ImLocation2 className="w-full h-full" /> : 
-            (weight === Infinity ? '' : weight)
-          )
-        }
+      <div className="flex justify-center items-center h-full p-3 hover:p-1 duration-200 ease-in">
+        {isStartNode && <MdOutlineMyLocation className="w-full h-full" />}
+        {isTargetNode && <ImLocation2 className="w-full h-full" />}
+        {weight !== Infinity && weight}
       </div>
     </div>
   )

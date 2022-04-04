@@ -14,22 +14,27 @@ import {
 const GRID_ROWS = 10, GRID_COLS = 20;
 
 export default function BreadFirstSearch() {
-  const startNode = {row: 0, col: 0 };
-  const targetNode = { row: GRID_ROWS - 1, col: GRID_COLS - 1 };
+  const [startNode, setStartNode] = useState({row: 0, col: 0 });
+  const [targetNode, setTargetNode] = useState({ row: GRID_ROWS - 1, col: GRID_COLS - 1 });
+  const [changeNodeMode, setChangeNodeMode] = useState(0);
   
   const [grid, setGrid] = useState(getInitialGrid(
     GRID_ROWS, GRID_COLS, startNode, targetNode
   ));
   
   const [resetGrid, setResetGrid] = useState(false);
+  const [algorithmRunned, setAlgorithmRunned] = useState(false);
+  const [algorithmIsRunning, setAlgorithmIsRunning] = useState(false);
 
   const resetGridHandler = () => {
+    if (algorithmIsRunning) return;
     for (const row of grid) {
       for (const node of row) {
         document.getElementById(`node-${node.row}-${node.col}`).classList.remove('bg-sky-400', 'bg-yellow-300');
       }
     }
     setResetGrid(!resetGrid);
+    setAlgorithmRunned(false);
   };
 
   useEffect(() => {
@@ -51,27 +56,88 @@ export default function BreadFirstSearch() {
     return newGrid;
   };
 
+  const moveStartNode = (row, col) => {
+    const newGrid = grid.slice();
+    const oldStartNode = newGrid[startNode.row][startNode.col];
+
+    const currentStartNode = newGrid[row][col];
+    if (currentStartNode.isWall) return grid;
+    
+    const newOldStartNode = {
+      ...oldStartNode,
+      isStartNode: false
+    };
+    const newCurrentStartNode = {
+      ...currentStartNode,
+      isStartNode: true
+    };
+    
+    newGrid[startNode.row][startNode.col] = newOldStartNode;
+    newGrid[row][col] = newCurrentStartNode;
+    setStartNode({ row: row, col: col });
+    return newGrid;
+  };
+
+  const moveTargetNode = (row, col) => {
+    const newGrid = grid.slice();
+    const oldTargetNode = newGrid[targetNode.row][targetNode.col];
+    
+    const currentTargetNode = newGrid[row][col];
+    if (currentTargetNode.isWall) return grid;
+
+    const newOldTargetNode = {
+      ...oldTargetNode,
+      isTargetNode: false
+    };
+    const newCurrentTargetNode = {
+      ...currentTargetNode,
+      isTargetNode: true
+    };
+
+    newGrid[targetNode.row][targetNode.col] = newOldTargetNode;
+    newGrid[row][col] = newCurrentTargetNode;
+    setTargetNode({ row, col });
+    return newGrid;
+  };
+
   const mouseDownHandler = (row, col) => {
+    if (algorithmRunned) return;
     const node = grid[row][col];
+    let newGrid = [];
     if (!node.isStartNode && !node.isTargetNode) {
-      const newGrid = toggleGridNode(row, col);
-      setGrid(newGrid);
+      newGrid = toggleGridNode(row, col);
+      setChangeNodeMode(0);
+    } else if (node.isStartNode) {
+      newGrid = moveStartNode(row, col);
+      setChangeNodeMode(1);
+    } else {
+      newGrid = moveTargetNode(row, col);
+      setChangeNodeMode(2);
     }
+    setGrid(newGrid);
     setMousePressed(true);
   };
   const mouseEnterHandler = (row, col) => {
+    if (algorithmRunned) return;
     if (!mousePressed) return;
-    const node = grid[row][col];
-    if (!node.isStartNode && !node.isTargetNode) {
-      const newGrid = toggleGridNode(row, col);
-      setGrid(newGrid);
+    let newGrid = [];
+    if (changeNodeMode === 0) {
+      newGrid = toggleGridNode(row, col);
+    } else if (changeNodeMode === 1) {
+      newGrid = moveStartNode(row, col);
+    } else {
+      newGrid = moveTargetNode(row, col);
     }
+    setGrid(newGrid);
   };
   const mouseUpHandler = () => {
     setMousePressed(false);
+    setChangeNodeMode(0);
   };
 
   const runAlgorithm = () => {
+    setAlgorithmRunned(true);
+    setAlgorithmIsRunning(true);
     const { reachTargetNode, visitedNodeOrder } = runBreadFirstSearch(
       grid[startNode.row][startNode.col], grid, GRID_ROWS, GRID_COLS
     );
@@ -107,6 +173,9 @@ export default function BreadFirstSearch() {
         document.getElementById(`node-${node.row}-${node.col}`).classList.add(
           'bg-yellow-300'
         );
+        if (i === path.length - 1) {
+          setAlgorithmIsRunning(false);
+        }
       }, 50*i);
     }
   };
