@@ -1,16 +1,26 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export default function ContentCard({
   title,
   algorithms,
-  type
+  type,
+  imageSrc,
+  imageAlt
 }) {
   return (
     <div className="rounded-xl drop-shadow-xl bg-white hover:bg-gray-100 cursor-pointer">
       <div className="p-5">
         <h2 className="font-bold text-2xl">{title}</h2>
       </div>
-      <div className="bg-black w-full h-36"></div>
+      <div className="w-full h-36 relative">
+        <Image
+          src={imageSrc}
+          alt={imageAlt || "thumb"}
+          layout="fill"
+          objectFit="cover"
+        />
+      </div>
       <div className="p-5 space-y-3">
         <p className="font-bold">{"List of algorithms :"}</p>
         <div className="w-full">
