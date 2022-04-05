@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
       toast(() => (
         <p className='ml-1'>
           {"Please reopen this window on your laptop/desktop if you are currently using a"}
-          <b>{"mobile device"}</b>
+          <b>{" mobile device"}</b>
         </p>
       ), { duration: 6000, });
     }
