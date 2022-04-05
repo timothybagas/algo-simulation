@@ -29,7 +29,7 @@ export default function ContentCard({
               className="bg-gray-200 p-2 hover:bg-sky-400 hover:text-white duration-200 ease-in rounded-lg w-fit inline-block m-1"
               key={key}
             >
-              <Link href={`${type}/${algorithm.toLowerCase().split(/ /).join('-')}`}>
+              <Link href={`/${type}/${algorithm.toLowerCase().split(/ /).join('-')}`}>
                 <a>{algorithm}</a>
               </Link>
             </div>
