@@ -1,8 +1,8 @@
+import findPath from "./utils/FindPath";
+
 export default function runBreadFirstSearch(startNode, grid, gridRows, gridCols) {
   const dr = [0, 1, 0, -1], dc = [1, 0, -1, 0];
-  let reachTargetNode = false;
-  const queue = [], visitedNodeOrder = [];
-  queue.push(startNode);
+  const queue = [startNode], visitedNodeOrder = [];
 
   while (queue.length) {
     const cur = queue.shift();
@@ -11,8 +11,7 @@ export default function runBreadFirstSearch(startNode, grid, gridRows, gridCols)
 
     visitedNodeOrder.push(cur);
     if (cur.isTargetNode) {
-      reachTargetNode = true;
-      break;
+      return { path: findPath(cur), visitedNodeOrder };
     }
     for (let i = 0; i < 4; i++) {
       const nr = cur.row + dr[i];
@@ -26,5 +25,5 @@ export default function runBreadFirstSearch(startNode, grid, gridRows, gridCols)
       queue.push(node);
     }
   }
-  return {reachTargetNode, visitedNodeOrder};
+  return { path: null, visitedNodeOrder };
 }

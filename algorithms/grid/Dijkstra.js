@@ -1,10 +1,9 @@
+import findPath from "./utils/FindPath";
+
 export default function runDijkstra(startNode, grid, gridRows, gridCols) {
-  const dr = [0, 1, 0, -1], dc = [1, 0, -1, 0];
-  let reachTargetNode = false;
-  
-  const queue = [], visitedNodeOrder = [];
+  const dr = [0, 1, 0, -1], dc = [1, 0, -1, 0];  
   startNode.distance = 0;
-  queue.push(startNode);
+  const queue = [startNode], visitedNodeOrder = [];
 
   while (queue.length) {
     const cur = queue.shift();
@@ -14,8 +13,7 @@ export default function runDijkstra(startNode, grid, gridRows, gridCols) {
     cur.isVisited = true;
 
     if (cur.isTargetNode) {
-      reachTargetNode = true;
-      break;
+      return { path: findPath(cur), visitedNodeOrder };
     }
     for (let i = 0; i < 4; i++) {
       const nr = cur.row + dr[i];
@@ -32,5 +30,5 @@ export default function runDijkstra(startNode, grid, gridRows, gridCols) {
       }
     }
   }
-  return {reachTargetNode, visitedNodeOrder};
+  return { path: null, visitedNodeOrder };
 }
