@@ -14,7 +14,7 @@ export default function GridNode({
   return (
     <div
       id={`node-${row}-${col}`}
-      className={`w-[60px] h-[60px] border border-gray-300 ${isWall ? 'bg-gray-800' : ''} cursor-pointer duration-200 ease-in`}
+      className={`w-[60px] h-[60px] border border-gray-300 ${!isStartNode && !isTargetNode && isWall ? 'bg-gray-800' : ''} cursor-pointer duration-200 ease-in`}
       onMouseDown={onMouseDown}
       onMouseEnter={onMouseEnter}
       onMouseUp={onMouseUp}
