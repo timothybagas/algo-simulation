@@ -5,24 +5,23 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 
 import Layout from "../Layout"
 import GridNode from "./GridNode";
-import {
-  findPath,
-  getInitialGrid
-} from "../../algorithms/grid";
+import { getInitialGrid } from "../../algorithms/grid";
 
 const GRID_ROWS = 10, GRID_COLS = 20;
 
 export default function Grid({ algorithmName, algorithm }) {
   const [startNode, setStartNode] = useState({row: 0, col: 0 });
   const [targetNode, setTargetNode] = useState({ row: GRID_ROWS - 1, col: GRID_COLS - 1 });
-  const [changeNodeMode, setChangeNodeMode] = useState(0);
+  const [pickedNode, setPickedNode] = useState({
+    isStartNode: false, isTargetNode: false
+  });
   
   const [grid, setGrid] = useState(getInitialGrid(
     GRID_ROWS, GRID_COLS, startNode, targetNode
   ));
   
   const [resetGrid, setResetGrid] = useState(false);
-  const [algorithmRunned, setAlgorithmRunned] = useState(false);
+  const [algorithmIsFinished, setAlgorithmIsFinished] = useState(false);
   const [algorithmIsRunning, setAlgorithmIsRunning] = useState(false);
 
   const resetGridHandler = () => {
@@ -33,7 +32,7 @@ export default function Grid({ algorithmName, algorithm }) {
       }
     }
     setResetGrid(!resetGrid);
-    setAlgorithmRunned(false);
+    setAlgorithmIsFinished(false);
   };
 
   useEffect(() => {
@@ -47,6 +46,7 @@ export default function Grid({ algorithmName, algorithm }) {
   const toggleGridNode = (row, col) => {
     const newGrid = grid.slice();
     const node = newGrid[row][col];
+    if (node.isStartNode | node.isTargetNode) return grid;
     const newNode = {
       ...node,
       isWall: !node.isWall
@@ -60,7 +60,7 @@ export default function Grid({ algorithmName, algorithm }) {
     const oldStartNode = newGrid[startNode.row][startNode.col];
 
     const currentStartNode = newGrid[row][col];
-    if (currentStartNode.isWall) return grid;
+    if (currentStartNode.isWall | currentStartNode.isTargetNode) return grid;
     
     const newOldStartNode = {
       ...oldStartNode,
@@ -82,7 +82,7 @@ export default function Grid({ algorithmName, algorithm }) {
     const oldTargetNode = newGrid[targetNode.row][targetNode.col];
     
     const currentTargetNode = newGrid[row][col];
-    if (currentTargetNode.isWall) return grid;
+    if (currentTargetNode.isWall | currentTargetNode.isStartNode) return grid;
 
     const newOldTargetNode = {
       ...oldTargetNode,
@@ -100,42 +100,47 @@ export default function Grid({ algorithmName, algorithm }) {
   };
 
   const mouseDownHandler = (row, col) => {
-    if (algorithmRunned) return;
+    if (algorithmIsFinished) return;
     const node = grid[row][col];
     let newGrid = [];
-    if (!node.isStartNode && !node.isTargetNode) {
-      newGrid = toggleGridNode(row, col);
-      setChangeNodeMode(0);
-    } else if (node.isStartNode) {
+    if (node.isStartNode) {
       newGrid = moveStartNode(row, col);
-      setChangeNodeMode(1);
-    } else {
+      setPickedNode({
+        isStartNode: true, isTargetNode: false
+      });
+    } else if (node.isTargetNode) {
       newGrid = moveTargetNode(row, col);
-      setChangeNodeMode(2);
+      setPickedNode({
+        isStartNode: false, isTargetNode: true
+      });
+    } else {
+      newGrid = toggleGridNode(row, col);
     }
     setGrid(newGrid);
     setMousePressed(true);
   };
   const mouseEnterHandler = (row, col) => {
-    if (algorithmRunned) return;
+    if (algorithmIsFinished) return;
     if (!mousePressed) return;
     let newGrid = [];
-    if (changeNodeMode === 0) {
-      newGrid = toggleGridNode(row, col);
-    } else if (changeNodeMode === 1) {
+    if (pickedNode.isStartNode) {
       newGrid = moveStartNode(row, col);
-    } else {
+    } else if (pickedNode.isTargetNode) {
       newGrid = moveTargetNode(row, col);
+    } else {
+      newGrid = toggleGridNode(row, col);
     }
     setGrid(newGrid);
   };
   const mouseUpHandler = () => {
     setMousePressed(false);
-    setChangeNodeMode(0);
+    setPickedNode({
+      isStartNode: false, isTargetNode: false
+    });
   };
 
   const runAlgorithm = () => {
-    setAlgorithmRunned(true);
+    setAlgorithmIsFinished(true);
     setAlgorithmIsRunning(true);
     const { path, visitedNodeOrder } = algorithm(
       grid[startNode.row][startNode.col], grid, GRID_ROWS, GRID_COLS
