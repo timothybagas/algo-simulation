@@ -29,7 +29,7 @@ export default function runAStar(startNode, grid, gridRows, gridCols) {
       const node = grid[nr][nc];
       
       if (node.isVisited || node.isWall) continue;
-      const f = g[row][col] + 1 + squaredEuclideanDistance(targetNode, node);
+      const f = g[row][col] + 1 + manhattanDistance(targetNode, node);
 
       if (node.distance > f) {
         node.distance = f;
@@ -42,6 +42,6 @@ export default function runAStar(startNode, grid, gridRows, gridCols) {
   return { path: null, visitedNodeOrder };
 }
 
-function squaredEuclideanDistance(a, b) {
-  return Math.pow(a.row - b.row, 2) + Math.pow(a.col - b.col, 2);
+function manhattanDistance(a, b) {
+  return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
 }
