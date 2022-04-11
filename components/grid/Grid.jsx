@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import {
   BsPlayCircleFill,
   BsFillBackspaceFill,
@@ -30,6 +30,13 @@ export default function Grid({ algorithmName, algorithm }) {
   const [algorithmIsFinished, setAlgorithmIsFinished] = useState(false);
   const [algorithmIsRunning, setAlgorithmIsRunning] = useState(false);
 
+  const router = useRouter();
+  const routerHandler = e => {
+    e.preventDefault();
+    if (algorithmIsRunning) return;
+    router.push('/');
+  };
+
   const { resetGridHandler } = resetGrid({
     grid: grid,
     setGrid: setGrid,
@@ -50,6 +57,7 @@ export default function Grid({ algorithmName, algorithm }) {
   });
 
   const runAlgorithm = () => {
+    if (algorithmIsRunning) return;
     setAlgorithmIsFinished(true);
     setAlgorithmIsRunning(true);
     const { path, visitedNodeOrder } = algorithm(
@@ -65,9 +73,9 @@ export default function Grid({ algorithmName, algorithm }) {
       mainClassName="py-10 space-y-10"
     >
       <div className="px-10 flex items-center space-x-2 font-bold text-3xl">
-        <Link href="/">
-          <a><IoMdArrowRoundBack /></a>
-        </Link>
+        <button className="bg-transparent border-0" onClick={routerHandler}>
+          <IoMdArrowRoundBack />
+        </button>
         <h1>{algorithmName}</h1>
       </div>
 
