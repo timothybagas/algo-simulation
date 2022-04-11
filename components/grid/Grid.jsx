@@ -57,7 +57,7 @@ export default function Grid({ algorithmName, algorithm }) {
   });
 
   const runAlgorithm = () => {
-    if (algorithmIsRunning) return;
+    if (algorithmIsFinished) return;
     setAlgorithmIsFinished(true);
     setAlgorithmIsRunning(true);
     const { path, visitedNodeOrder } = algorithm(
