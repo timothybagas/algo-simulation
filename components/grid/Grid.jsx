@@ -16,7 +16,8 @@ import {
   resetGrid,
 } from "../../algorithms/grid";
 
-const GRID_ROWS = 10, GRID_COLS = 20;
+const GRID_ROWS = parseInt(process.env.NEXT_PUBLIC_GRID_ROWS, 10);
+const GRID_COLS = parseInt(process.env.NEXT_PUBLIC_GRID_COLS, 10);
 
 export default function Grid({ algorithmName, algorithm }) {
   const [startNode, setStartNode] = useState({row: 0, col: 0 });

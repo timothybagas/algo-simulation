@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import getInitialGrid from "./InitialGrid";
 import reupdateGrid from "./ReupdateGrid";
 
-const GRID_ROWS = 10, GRID_COLS = 20;
+const GRID_ROWS = parseInt(process.env.NEXT_PUBLIC_GRID_ROWS, 10);
+const GRID_COLS = parseInt(process.env.NEXT_PUBLIC_GRID_COLS, 10);
 
 export default function resetGrid({
   grid,
