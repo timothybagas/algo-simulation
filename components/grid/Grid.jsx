@@ -16,9 +16,6 @@ const GRID_ROWS = 10, GRID_COLS = 20;
 export default function Grid({ algorithmName, algorithm }) {
   const [startNode, setStartNode] = useState({row: 0, col: 0 });
   const [targetNode, setTargetNode] = useState({ row: GRID_ROWS - 1, col: GRID_COLS - 1 });
-  const [pickedNode, setPickedNode] = useState({
-    isStartNode: false, isTargetNode: false
-  });
   
   const [grid, setGrid] = useState(getInitialGrid(
     GRID_ROWS, GRID_COLS, startNode, targetNode
@@ -53,8 +50,6 @@ export default function Grid({ algorithmName, algorithm }) {
     targetNode: targetNode,
     setTargetNode: setTargetNode,
     algorithmIsFinished: algorithmIsFinished,
-    pickedNode: pickedNode,
-    setPickedNode: setPickedNode,
   });
 
   const runAlgorithm = () => {

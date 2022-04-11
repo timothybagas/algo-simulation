@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import transformGridNode from "./TransformGridNode";
+import reupdateGrid from "./ReupdateGrid";
 
 export default function mouseHandler({
   grid,
@@ -9,13 +10,21 @@ export default function mouseHandler({
   targetNode,
   setTargetNode,
   algorithmIsFinished,
-  pickedNode,
-  setPickedNode,
 }) {
   const [mousePressed, setMousePressed] = useState(false);
+  const [pickedNode, setPickedNode] = useState({
+    isStartNode: false, isTargetNode: false
+  });
+
   const { toggleGridNode, moveStartNode, moveTargetNode } = transformGridNode({
     grid, startNode, setStartNode, targetNode, setTargetNode,
   });
+
+  const [updateGrid, setUpdateGrid] = useState(false);
+
+  useEffect(() => {
+    setGrid(reupdateGrid(grid, startNode, targetNode));
+  }, [updateGrid]);
 
   const mouseDownHandler = (row, col) => {
     if (algorithmIsFinished) return;
@@ -42,14 +51,17 @@ export default function mouseHandler({
     if (algorithmIsFinished) return;
     if (!mousePressed) return;
     let newGrid = [];
-    if (pickedNode.isStartNode) {
-      newGrid = moveStartNode(row, col);
-    } else if (pickedNode.isTargetNode) {
-      newGrid = moveTargetNode(row, col);
-    } else {
+    if (!pickedNode.isStartNode && !pickedNode.isTargetNode) {
       newGrid = toggleGridNode(row, col);
+      setGrid(newGrid);
+    } else {
+      if (pickedNode.isStartNode) {
+        newGrid = moveStartNode(row, col);
+      } else {
+        newGrid = moveTargetNode(row, col);
+      }
+      setUpdateGrid(!updateGrid);
     }
-    setGrid(newGrid);
   };
 
   const mouseUpHandler = () => {
