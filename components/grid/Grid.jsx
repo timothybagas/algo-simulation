@@ -1,6 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { BsPlayCircleFill, BsFillBackspaceFill } from "react-icons/bs";
+import {
+  BsPlayCircleFill,
+  BsFillBackspaceFill,
+  BsFillTrashFill,
+} from "react-icons/bs";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 import Layout from "../Layout"
@@ -9,41 +13,31 @@ import {
   getInitialGrid,
   animateAlgorithm,
   mouseHandler,
+  resetGrid,
 } from "../../algorithms/grid";
 
-const GRID_ROWS = 10, GRID_COLS = 20;
+const GRID_ROWS = parseInt(process.env.NEXT_PUBLIC_GRID_ROWS, 10);
+const GRID_COLS = parseInt(process.env.NEXT_PUBLIC_GRID_COLS, 10);
 
 export default function Grid({ algorithmName, algorithm }) {
   const [startNode, setStartNode] = useState({row: 0, col: 0 });
   const [targetNode, setTargetNode] = useState({ row: GRID_ROWS - 1, col: GRID_COLS - 1 });
-  const [pickedNode, setPickedNode] = useState({
-    isStartNode: false, isTargetNode: false
-  });
   
   const [grid, setGrid] = useState(getInitialGrid(
     GRID_ROWS, GRID_COLS, startNode, targetNode
   ));
   
-  const [resetGrid, setResetGrid] = useState(false);
   const [algorithmIsFinished, setAlgorithmIsFinished] = useState(false);
   const [algorithmIsRunning, setAlgorithmIsRunning] = useState(false);
 
-  const resetGridHandler = () => {
-    if (algorithmIsRunning) return;
-    for (const row of grid) {
-      for (const node of row) {
-        document.getElementById(`node-${node.row}-${node.col}`).classList.remove('bg-sky-400', 'bg-yellow-300');
-      }
-    }
-    setResetGrid(!resetGrid);
-    setAlgorithmIsFinished(false);
-  };
-
-  useEffect(() => {
-    setGrid(getInitialGrid(
-      GRID_ROWS, GRID_COLS, startNode, targetNode
-    ));
-  }, [resetGrid]);
+  const { resetGridHandler } = resetGrid({
+    grid: grid,
+    setGrid: setGrid,
+    startNode: startNode,
+    targetNode: targetNode,
+    algorithmIsRunning: algorithmIsRunning,
+    setAlgorithmIsFinished: setAlgorithmIsFinished,
+  });
 
   const { mouseDownHandler, mouseEnterHandler, mouseUpHandler } = mouseHandler({
     grid: grid,
@@ -53,8 +47,6 @@ export default function Grid({ algorithmName, algorithm }) {
     targetNode: targetNode,
     setTargetNode: setTargetNode,
     algorithmIsFinished: algorithmIsFinished,
-    pickedNode: pickedNode,
-    setPickedNode: setPickedNode,
   });
 
   const runAlgorithm = () => {
@@ -92,10 +84,19 @@ export default function Grid({ algorithmName, algorithm }) {
         {/* reset grid */}
         <button
           className="bg-red-500 text-white font-bold p-2 rounded-lg flex items-center"
-          onClick={resetGridHandler}
+          onClick={() => resetGridHandler()}
         >
           <BsFillBackspaceFill className="mr-1" />
           {"Reset Grid"}
+        </button>
+
+        {/* clear path */}
+        <button
+          className="bg-red-400 text-white font-bold p-2 rounded-lg flex items-center"
+          onClick={() => resetGridHandler(false)}
+        >
+          <BsFillTrashFill className="mr-1" />
+          {"Clear Path"}
         </button>
       </div>
 

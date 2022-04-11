@@ -3,6 +3,7 @@ export default function createNode(
   col,
   isStartNode,
   isTargetNode,
+  isWall = false
 ) {
   return {
     row,
@@ -11,7 +12,7 @@ export default function createNode(
     isStartNode,
     isTargetNode,
     isVisited: false,
-    isWall: false,
+    isWall,
     prevNode: null
   };
 }
