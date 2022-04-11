@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   BsPlayCircleFill,
@@ -13,8 +13,8 @@ import {
   getInitialGrid,
   animateAlgorithm,
   mouseHandler,
+  resetGrid,
 } from "../../algorithms/grid";
-import reupdateGrid from "../../algorithms/grid/utils/ReupdateGrid";
 
 const GRID_ROWS = 10, GRID_COLS = 20;
 
@@ -26,35 +26,17 @@ export default function Grid({ algorithmName, algorithm }) {
     GRID_ROWS, GRID_COLS, startNode, targetNode
   ));
   
-  const [resetGrid, setResetGrid] = useState(false);
-  const [clearPath, setClearPath] = useState(false);
   const [algorithmIsFinished, setAlgorithmIsFinished] = useState(false);
   const [algorithmIsRunning, setAlgorithmIsRunning] = useState(false);
 
-  const resetGridHandler = (removeAll = true) => {
-    if (algorithmIsRunning) return;
-    for (const row of grid) {
-      for (const node of row) {
-        document.getElementById(`node-${node.row}-${node.col}`).classList.remove('bg-sky-400', 'bg-yellow-300');
-      }
-    }
-    if (removeAll) {
-      setResetGrid(!resetGrid);
-    } else {
-      setClearPath(!clearPath);
-    }
-    setAlgorithmIsFinished(false);
-  };
-
-  useEffect(() => {
-    setGrid(getInitialGrid(
-      GRID_ROWS, GRID_COLS, startNode, targetNode
-    ));
-  }, [resetGrid]);
-
-  useEffect(() => {
-    setGrid(reupdateGrid(grid, startNode, targetNode));
-  }, [clearPath]);
+  const { resetGridHandler } = resetGrid({
+    grid: grid,
+    setGrid: setGrid,
+    startNode: startNode,
+    targetNode: targetNode,
+    algorithmIsRunning: algorithmIsRunning,
+    setAlgorithmIsFinished: setAlgorithmIsFinished,
+  });
 
   const { mouseDownHandler, mouseEnterHandler, mouseUpHandler } = mouseHandler({
     grid: grid,

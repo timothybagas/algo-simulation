@@ -6,6 +6,7 @@ import findPath from "./utils/FindPath"
 import getInitialGrid from "./utils/InitialGrid"
 import animateAlgorithm from "./utils/AnimateAlgorithm"
 import mouseHandler from "./utils/MouseHandler"
+import resetGrid from "./utils/ResetGrid"
 
 export {
   runBreadFirstSearch, 
@@ -16,4 +17,5 @@ export {
   getInitialGrid,
   animateAlgorithm,
   mouseHandler,
+  resetGrid,
 }
