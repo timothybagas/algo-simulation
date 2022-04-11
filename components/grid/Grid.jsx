@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { BsPlayCircleFill, BsFillBackspaceFill } from "react-icons/bs";
+import {
+  BsPlayCircleFill,
+  BsFillBackspaceFill,
+  BsFillTrashFill,
+} from "react-icons/bs";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 import Layout from "../Layout"
@@ -10,6 +14,7 @@ import {
   animateAlgorithm,
   mouseHandler,
 } from "../../algorithms/grid";
+import reupdateGrid from "../../algorithms/grid/utils/ReupdateGrid";
 
 const GRID_ROWS = 10, GRID_COLS = 20;
 
@@ -22,17 +27,22 @@ export default function Grid({ algorithmName, algorithm }) {
   ));
   
   const [resetGrid, setResetGrid] = useState(false);
+  const [clearPath, setClearPath] = useState(false);
   const [algorithmIsFinished, setAlgorithmIsFinished] = useState(false);
   const [algorithmIsRunning, setAlgorithmIsRunning] = useState(false);
 
-  const resetGridHandler = () => {
+  const resetGridHandler = (removeAll = true) => {
     if (algorithmIsRunning) return;
     for (const row of grid) {
       for (const node of row) {
         document.getElementById(`node-${node.row}-${node.col}`).classList.remove('bg-sky-400', 'bg-yellow-300');
       }
     }
-    setResetGrid(!resetGrid);
+    if (removeAll) {
+      setResetGrid(!resetGrid);
+    } else {
+      setClearPath(!clearPath);
+    }
     setAlgorithmIsFinished(false);
   };
 
@@ -41,6 +51,10 @@ export default function Grid({ algorithmName, algorithm }) {
       GRID_ROWS, GRID_COLS, startNode, targetNode
     ));
   }, [resetGrid]);
+
+  useEffect(() => {
+    setGrid(reupdateGrid(grid, startNode, targetNode));
+  }, [clearPath]);
 
   const { mouseDownHandler, mouseEnterHandler, mouseUpHandler } = mouseHandler({
     grid: grid,
@@ -87,10 +101,19 @@ export default function Grid({ algorithmName, algorithm }) {
         {/* reset grid */}
         <button
           className="bg-red-500 text-white font-bold p-2 rounded-lg flex items-center"
-          onClick={resetGridHandler}
+          onClick={() => resetGridHandler()}
         >
           <BsFillBackspaceFill className="mr-1" />
           {"Reset Grid"}
+        </button>
+
+        {/* clear path */}
+        <button
+          className="bg-red-400 text-white font-bold p-2 rounded-lg flex items-center"
+          onClick={() => resetGridHandler(false)}
+        >
+          <BsFillTrashFill className="mr-1" />
+          {"Clear Path"}
         </button>
       </div>
 
