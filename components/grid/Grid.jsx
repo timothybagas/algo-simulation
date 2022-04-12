@@ -112,6 +112,7 @@ export default function Grid({ algorithmName, algorithm }) {
         <p className="text-center">
           <span className="font-bold">{"Note : "}</span>
           {"Tap an empty grid cell to add/remove wall"}
+          <span className="bg-yellow-300 invisible">{"Yellow"}</span>
         </p>
         <div className="w-full">
           {grid.map((row, i) => (
