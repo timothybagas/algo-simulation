@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   BsPlayCircleFill,
   BsFillBackspaceFill,
   BsFillTrashFill,
 } from "react-icons/bs";
+import { GiStoneWall } from "react-icons/gi";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 import Layout from "../Layout"
@@ -14,6 +15,7 @@ import {
   animateAlgorithm,
   mouseHandler,
   resetGrid,
+  generateRandomMaze,
 } from "../../algorithms/grid";
 
 const GRID_ROWS = parseInt(process.env.NEXT_PUBLIC_GRID_ROWS, 10);
@@ -67,6 +69,24 @@ export default function Grid({ algorithmName, algorithm }) {
       animateAlgorithm(visitedNodeOrder, path, setAlgorithmIsRunning);
   };
 
+  const [mazeButtonPressed, setMazeButtonPressed] = useState(false);
+  const [triggerCreateMaze, setTriggerCreateMaze] = useState(false);
+
+  useEffect(() => {
+    if (mazeButtonPressed && !algorithmIsRunning) {
+      const newGrid = generateRandomMaze(GRID_ROWS, GRID_COLS);
+      setGrid(newGrid);
+      setStartNode({ row: 1, col: 1 });
+      setTargetNode({ row: GRID_ROWS - 2, col: GRID_COLS - 2 });
+    }
+  }, [triggerCreateMaze]);
+
+  const generateMazeHandler = () => {
+    resetGridHandler();
+    setMazeButtonPressed(true);
+    setTriggerCreateMaze(!triggerCreateMaze);
+  };
+
   return (
     <Layout
       title={algorithmName}
@@ -105,6 +125,15 @@ export default function Grid({ algorithmName, algorithm }) {
         >
           <BsFillTrashFill className="mr-1" />
           {"Clear Path"}
+        </button>
+
+        {/* generate a maze */}
+        <button
+          className="bg-blue-500 text-white font-bold p-2 rounded-lg flex items-center"
+          onClick={generateMazeHandler}
+        >
+          <GiStoneWall className="mr-1" />
+          {"Generate a Maze"}
         </button>
       </div>
 
